@@ -511,8 +511,14 @@ AVSValue __cdecl Create_Bifrost(AVSValue args, void* user_data, IScriptEnvironme
         {
             const VideoInfo& vi2 = args[1].AsClip()->GetVideoInfo();
 
-            if (vi.IsSameColorspace(vi2) || vi.width != vi2.width || vi.height != vi2.height || vi.num_frames != vi2.num_frames)
-                env->ThrowError("Bifrost: The two clips must have the same pixel type, dimensions and length.");
+            if (vi.pixel_type != vi2.pixel_type)
+                env->ThrowError("Bifrost: The two clips must have the same pixel type.");
+
+            if (vi.width != vi2.width || vi.height != vi2.height)
+                env->ThrowError("Bifrost: The two clips must have the same dimensions.");
+
+            if (vi.num_frames != vi2.num_frames)
+                env->ThrowError("Bifrost: The two clips must have the same length.");
 
             return args[1].AsClip();
         }
